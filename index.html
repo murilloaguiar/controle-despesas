@@ -13,7 +13,9 @@
 
     <link rel="stylesheet" type="text/css" href="assets/css/style.css">
 
-    <title>Document</title>
+    <link rel="icon" href="assets/images/pig.svg">
+
+    <title>Controle de despesas</title>
 </head>
 <body>
     <header>
@@ -38,20 +40,23 @@
     </header>
 
     <main class="container">
+        <!-- Content -->
         <section class="mt-4 content">
             <header>
-                <h1>Cadastre uma despesa</h1>
+                <h1 class="display-4">Cadastre uma despesa</h1>
             </header>
 
-            <div class="row">
+            <div class="row"> <!-- row-->
 
-                <div class="col-4">
-                    <input type="text" class="form-control" placeholder="Dia" id="day" required>
+                <div class="col-4 col-md-3">
+                    <label for="day" class="form-label">Dia</label>
+                    <input type="text" class="form-control focus" placeholder="Digite o dia" id="day" required min="1" max="31">
                 </div>
 
-                <div class="col-8">
-                    <select class="form-select" required>
-                        <option value="">Mês</option>
+                <div class="col-8 col-md-4">
+                    <label for="month" class="form-label">Mês</label>
+                    <select class="form-select focus" required id="month" >
+                        <option value="">Selecione</option>
                         <option value="01">Janeiro</option>
                         <option value="02">Fevereiro</option>
                         <option value="03">Março</option>
@@ -67,45 +72,46 @@
                       </select>
                 </div>
 
-            </div>
-
-            <div class="row mt-2">
-                <div class="col-12">
-                    <select id="category" class="form-select" required>
-                        <option value="">Categoria</option>
+                <div class="col-12 col-md-5">
+                    <label for="category" class="form-label">Categoria</label>
+                    <select id="category" class="form-select focus" required>
+                        <option value="">Selecione</option>
                         <option value="1">Alimentação</option>
                         <option value="2">Casa</option>
                         <option value="3">Lazer</option>
                         <option value="4">Transporte</option>
                     </select>
                 </div>
-            </div>
 
-            <div class="row mt-2">
                 <div class="col-12">
-                    <input type="text" class="form-control" placeholder="Descrição" id="description" required>
-                </div>
-            </div>
-
-            <div class="row mt-2">
-                <div class="col-7">
-                    <div class="input-group">
-                        <span class="input-group-text">R$</span>
-                        <input type="text" class="form-control" id="value" placeholder="Valor" required>
-                      </div>
+                    <label for="description" class="form-label">Descrição</label>
+                    <input type="text" class="form-control focus" placeholder="Escreva uma descrição" id="description" required>
                 </div>
 
-                <div class="col-5">
-                    <div class="d-flex">
-                        <button class="btn btn-outline-success flex-fill" id="insert">Cadastrar</button>
+                <div class="col-12">
+                    <div class="row">
+                        <div class="col-7">
+                            <label for="value" class="form-label">Valor</label>
+                            <div class="input-group">
+                                <span class="input-group-text">R$</span>
+                                <input type="text" class="form-control focus" id="value" placeholder="Ex.: 25.00" required>
+                            </div>
+                        </div>
+
+                        <div class="col-5 d-flex">
+                            <div class="align-self-end flex-fill">
+                                <button class="btn btn-success" id="insert">Cadastrar</button>
+                            </div>
+                    
+                        </div>
                     </div>
                     
                 </div>
-            </div>
-            
-            
+
+            </div> <!-- /row-->
           
         </section>
+        <!-- /Content -->
     </main>
 
 

@@ -4,3 +4,23 @@
     box-sizing: border-box;
 }
 
+body{
+    background-image: url(../images/backgorund.png);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+main.container{
+    height: 100vh;
+    padding: 2em;
+}
+
+button#insert{
+    width: 100%;
+}
+
+@media (max-width: 575.98px) { 
+
+   
+}
