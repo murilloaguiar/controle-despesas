@@ -68,14 +68,14 @@ class Data{
         localStorage.setItem('id', id)
     }
 
-    showAllExpenses(){
+    getAllExpenses(){
         let id = localStorage.getItem('id')
         let expense = []
         
 
         for (let i = 1; i <= id; i++) {
             let item = JSON.parse(localStorage.getItem(i))
-            console.log(item)
+            //console.log(item)
 
             if (item == null) {
                 continue
@@ -90,16 +90,99 @@ class Data{
         return expense
     }
 
+    searchExpense(expense){
+        let filteredExpense = []
+
+        filteredExpense = this.getAllExpenses()
+
+        console.log(filteredExpense)
+    }
+
 
 }// ------ /Data
 
-
-
 const inputs = document.querySelectorAll('.focus')
-let button = document.querySelector("#insert")
-let data = new Data
 
-button.addEventListener('click', submit)
+let data = new Data()
+let date = new Date()
+
+//body onload
+function viewExpense(expense = [], filter = false){
+    console.log(expense.length)
+    if (expense.length == 0 && filter == false) {
+        expense = data.getAllExpenses()
+    }
+
+    let tBody = document.querySelector('#tbody')
+
+    expense.forEach(element =>{
+        //console.log(element)
+        let row = tBody.insertRow()
+
+        //date
+        row.insertCell(0).innerHTML = `${element.day}/${element.month}/${date.getFullYear()}`
+
+        switch (element.category) {
+            case '1':
+                element.category = 'Alimentação'
+                break;
+        
+            case '2':
+                element.category = 'Casa'
+                break;
+            case '3':
+                element.category = 'Lazer'
+                break;
+            case '4':
+                element.category = 'Transporte'
+                break;
+        }
+
+        // category
+        row.insertCell(1).innerHTML = `${element.category}`
+
+        // description
+        row.insertCell(2).innerHTML = `${element.description}`
+
+        // value
+        row.insertCell(3).innerHTML = `R$ ${element.value}`
+    })
+}
+
+// button onclick index page
+function submit(){
+
+    let day = document.querySelector("#day")
+    let month = document.querySelector("#month")
+    let category = document.querySelector("#category")
+    let description = document.querySelector("#description")
+    let value = document.querySelector("#value")
+    
+    let expense = new Expense(
+        day.value, 
+        month.value,
+        date.getFullYear(), 
+        category.value, 
+        description.value, 
+        Number(value.value)
+    )
+
+    console.log()
+
+    if (expense.validate()) {
+
+        inputs.forEach(element=>{
+            focusOutline(element, 3)
+            element.value = ""
+        })
+
+        deleteDivAlert('erro')
+
+        data.insert(expense)
+        
+        alert('produtos cadastrados')
+    }
+}
 
 function deleteDivAlert(id){
 
@@ -123,41 +206,6 @@ function createDivAlert(message, id){
     let section = document.querySelector(".content")
     
     section.appendChild(div)
-}
-
-function submit(){
-
-    let day = document.querySelector("#day")
-    let month = document.querySelector("#month")
-    let category = document.querySelector("#category")
-    let description = document.querySelector("#description")
-    let value = document.querySelector("#value")
-    let date = new Date()
-
-    let expense = new Expense(
-        day.value, 
-        month.value,
-        date.getFullYear(), 
-        category.value, 
-        description.value, 
-        Number(value.value)
-    )
-
-    console.log()
-
-    if (expense.validate()) {
-
-        inputs.forEach(element=>{
-            focusOutline(element, 3)
-            element.value = ""
-        })
-
-        deleteDivAlert('erro')
-
-        //data.insert(expense)
-        
-        alert('produtos cadastrados')
-    }
 }
 
 function focusOutline(element, id){

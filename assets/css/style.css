@@ -4,7 +4,7 @@
     box-sizing: border-box;
 }
 
-body{
+body#home{
     background-image: url(../images/backgorund.png);
     background-size: cover;
     background-position: center;
@@ -13,12 +13,18 @@ body{
 
 main.container{
     height: 100vh;
-    padding: 2em;
 }
 
-button#insert{
+button#insert,
+button#filter{
     width: 100%;
 }
+
+section{
+    padding: 1.5em;
+}
+
+
 
 @media (max-width: 575.98px) { 
 
