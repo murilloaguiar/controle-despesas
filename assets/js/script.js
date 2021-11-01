@@ -96,6 +96,30 @@ class Data{
         filteredExpense = this.getAllExpenses()
 
         console.log(filteredExpense)
+        console.log(expense)
+
+       if (expense.day != "") {
+            filteredExpense = filteredExpense.filter(value => value.day == expense.day)
+        }
+
+        if (expense.month != "") {
+            filteredExpense = filteredExpense.filter(value => value.month == expense.month)
+        }
+
+        if (expense.category != "") {
+            filteredExpense = filteredExpense.filter(value => value.category == expense.category)
+        }
+
+        if (expense.description != "") {
+            filteredExpense = filteredExpense.filter(value => value.description == expense.description)
+        }
+
+        if (expense.value != "") {
+            filteredExpense = filteredExpense.filter(value => value.value == expense.value)
+        }
+
+        return filteredExpense
+
     }
 
 
@@ -108,13 +132,20 @@ let date = new Date()
 
 //body onload
 function viewExpense(expense = [], filter = false){
-    console.log(expense.length)
+    
     if (expense.length == 0 && filter == false) {
         expense = data.getAllExpenses()
     }
 
-    let tBody = document.querySelector('#tbody')
+    let id = localStorage.getItem('id')
 
+    if (id == 0) {
+        createP("Ainda não existem despesas cadastradas")
+    }
+
+    let tBody = document.querySelector('#tbody')
+    tBody.innerHTML = ""
+ 
     expense.forEach(element =>{
         //console.log(element)
         let row = tBody.insertRow()
@@ -147,10 +178,12 @@ function viewExpense(expense = [], filter = false){
         // value
         row.insertCell(3).innerHTML = `R$ ${element.value}`
     })
+
+
 }
 
 // button onclick index page
-function submit(){
+const submit = ()=>{
 
     let day = document.querySelector("#day")
     let month = document.querySelector("#month")
@@ -184,7 +217,58 @@ function submit(){
     }
 }
 
-function deleteDivAlert(id){
+const filter = ()=>{
+    let day = document.querySelector("#day").value
+    let month = document.querySelector("#month").value
+    let category = document.querySelector("#category").value
+    let description = document.querySelector("#description").value
+    let value = document.querySelector("#value").value
+
+    let expense = new Expense(
+        day,
+        month,
+        date.getFullYear(), 
+        category,
+        description,
+        Number(value)
+    )
+    
+    let expenses = data.searchExpense(expense)
+    console.log(expenses)
+    
+    if (expenses.length == 0) {
+        createP("Não encontramos nenhuma depesa para o filtro")
+    }else{
+        deleteP()
+    }
+    
+    viewExpense(expenses,true)
+}
+
+const createP = (mesage)=>{
+
+    deleteP()
+
+    let header = document.querySelector('header.header-table')
+
+    let p = document.createElement('p')
+    p.innerHTML = mesage
+    p.className = "text-danger"
+
+    header.appendChild(p)
+}
+
+const deleteP = ()=>{
+    let p = document.querySelector('header.header-table p')
+
+    if (p != null) {
+        p.parentNode.removeChild(p)
+    }
+    
+    
+}
+
+const deleteDivAlert = id=>{
 
     let div_alert = document.querySelector(`div.div${id}`)
 
@@ -194,7 +278,7 @@ function deleteDivAlert(id){
     }
 }
 
-function createDivAlert(message, id){
+const createDivAlert = (message, id)=>{
 
     deleteDivAlert(id)
 
@@ -208,7 +292,7 @@ function createDivAlert(message, id){
     section.appendChild(div)
 }
 
-function focusOutline(element, id){
+const focusOutline = (element, id)=>{
     if (id==1) {
         element.style.border = '2px solid #22b070'
     }else if(id==2){
