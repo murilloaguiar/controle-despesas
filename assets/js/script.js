@@ -50,6 +50,12 @@ class Data{
     constructor(){
         let id = localStorage.getItem('id')
 
+        let permission = localStorage.getItem('permission')
+
+        if (permission == null) {
+            localStorage.setItem('permission', 0)
+        }
+
         if (id == null) {
             localStorage.setItem('id', 0)
         }
@@ -63,9 +69,12 @@ class Data{
     }
 
     insert(expense){
-        let id = this.nextId()
-        localStorage.setItem(id, JSON.stringify(expense))
-        localStorage.setItem('id', id)
+        if (localStorage.getItem('permission')==1) {
+            let id = this.nextId()
+            localStorage.setItem(id, JSON.stringify(expense))
+            localStorage.setItem('id', id) 
+        }
+        
     }
 
     getAllExpenses(){
@@ -75,16 +84,14 @@ class Data{
 
         for (let i = 1; i <= id; i++) {
             let item = JSON.parse(localStorage.getItem(i))
-            //console.log(item)
-
+            
             if (item == null) {
                 continue
             }
 
             item.id = i
 
-            expense.push(item)
-            
+            expense.push(item) 
         }
 
         return expense
@@ -119,7 +126,6 @@ class Data{
         }
 
         return filteredExpense
-
     }
 
     removeExpense(key){
@@ -129,6 +135,7 @@ class Data{
 
     removeAllExpenses(){
         localStorage.clear()
+        localStorage.setItem('permission', 0)
     }
 
 
@@ -197,47 +204,56 @@ function viewExpense(expense = [], filter = false){
         }
 
         row.insertCell(4).append(buttonRemove)
-
     })
-
-
 }
 
 // button onclick index page
 const submit = ()=>{
 
-    let day = document.querySelector("#day")
-    let month = document.querySelector("#month")
-    let category = document.querySelector("#category")
-    let description = document.querySelector("#description")
-    let value = document.querySelector("#value")
-    
-    let expense = new Expense(
-        day.value, 
-        month.value,
-        date.getFullYear(), 
-        category.value, 
-        description.value, 
-        Number(value.value)
-    )
+    if (localStorage.getItem('permission')==1) {
+        let day = document.querySelector("#day")
+        let month = document.querySelector("#month")
+        let category = document.querySelector("#category")
+        let description = document.querySelector("#description")
+        let value = document.querySelector("#value")
+        
+        let expense = new Expense(
+            day.value, 
+            month.value,
+            date.getFullYear(), 
+            category.value, 
+            description.value, 
+            Number(value.value)
+        )
 
-    console.log()
+        if (expense.validate()) {
 
-    if (expense.validate()) {
+            inputs.forEach(element=>{
+                focusOutline(element, 3)
+                element.value = ""
+            })
+
+            deleteDivAlert('erro')
+
+            data.insert(expense)
+            
+            let modal = new bootstrap.Modal(document.querySelector('#modalSuccess'))
+
+            modal.show()
+        }
+    }else{
 
         inputs.forEach(element=>{
             focusOutline(element, 3)
             element.value = ""
         })
-
-        deleteDivAlert('erro')
-
-        data.insert(expense)
-        
-        alert('produtos cadastrados')
+        createDivAlert('Você optou por não salvar os dados', 'permission0')
     }
+
+    
 }
 
+// button onclick view page
 const filter = ()=>{
     let day = document.querySelector("#day").value
     let month = document.querySelector("#month").value
@@ -264,6 +280,13 @@ const filter = ()=>{
     }
     
     viewExpense(expenses,true)
+}
+
+const deleteAll = (load = false)=>{
+    data.removeAllExpenses()
+    if (load) {
+        window.location.reload()
+    }
 }
 
 const createP = (mesage)=>{
