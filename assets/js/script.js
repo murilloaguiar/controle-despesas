@@ -122,6 +122,15 @@ class Data{
 
     }
 
+    removeExpense(key){
+        alert('removendo a despesa '+key)
+        localStorage.removeItem(key)
+    }
+
+    removeAllExpenses(){
+        localStorage.clear()
+    }
+
 
 }// ------ /Data
 
@@ -147,7 +156,7 @@ function viewExpense(expense = [], filter = false){
     tBody.innerHTML = ""
  
     expense.forEach(element =>{
-        //console.log(element)
+    
         let row = tBody.insertRow()
 
         //date
@@ -177,6 +186,18 @@ function viewExpense(expense = [], filter = false){
 
         // value
         row.insertCell(3).innerHTML = `R$ ${element.value}`
+
+        buttonRemove = document.createElement('i')
+        buttonRemove.className = "btn btn-danger far fa-trash-alt"
+        buttonRemove.id = element.id
+        
+        buttonRemove.onclick = ()=>{
+            data.removeExpense(event.target.id)
+            window.location.reload()
+        }
+
+        row.insertCell(4).append(buttonRemove)
+
     })
 
 
